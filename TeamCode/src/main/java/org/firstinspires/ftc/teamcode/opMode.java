@@ -101,22 +101,21 @@ public class opMode extends LinearOpMode {
              * Sweepers - Controller 1
              */
 
-            double defaultVal = 0;
-            while(gamepad1.left_trigger != 0f){
-                defaultVal += 0.1;
-                if(defaultVal >= 1){
-                    defaultVal = 0;
-                }
-                robot.rotateGrabL.setPosition(defaultVal);
-                robot.rotateGrabR.setPosition(defaultVal);
+            if(gamepad1.left_trigger > 0){
+                robot.rotateGrabL.setPower(gamepad1.right_trigger);
+                robot.rotateGrabR.setPower(gamepad1.right_trigger);
             }
-            while(gamepad1.right_trigger != 0f){
-                defaultVal += 0.1;
-                if(defaultVal >= 1){
-                    defaultVal = 0;
-                }
-                robot.rotateGrabL.setPosition(defaultVal);
-                robot.rotateGrabR.setPosition(defaultVal);
+            else{
+                robot.rotateGrabL.setPower(0);
+                robot.rotateGrabR.setPower(0);
+            }
+            if(gamepad1.right_trigger > 0){
+                robot.rotateGrabL.setPower(gamepad1.right_trigger);
+                robot.rotateGrabR.setPower(gamepad1.right_trigger);
+            }
+            else{
+                robot.rotateGrabL.setPower(0);
+                robot.rotateGrabR.setPower(0);
             }
 
             /**

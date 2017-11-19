@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -40,8 +41,8 @@ public class Hardware
     public DcMotor  motorBackRight   = null;
 
     // Arms
-    public Servo rotateGrabL = null;
-    public Servo rotateGrabR = null;
+    public CRServo rotateGrabL = null;
+    public CRServo rotateGrabR = null;
 
     public DcMotor drawer = null;
     public DcMotor clampR = null;
@@ -68,8 +69,8 @@ public class Hardware
 
         // Grabber
 
-        rotateGrabL = hardwareMap.servo.get("g_sweepL");
-        rotateGrabR = hardwareMap.servo.get("g_sweepR");
+        rotateGrabL = hardwareMap.crservo.get("g_sweepL");
+        rotateGrabR = hardwareMap.crservo.get("g_sweepR");
 
         // Clamps
 
@@ -86,8 +87,8 @@ public class Hardware
         motorBackLeft.setPower(0);
         motorBackRight.setPower(0);
 
-        rotateGrabL.setPosition(0);
-        rotateGrabR.setPosition(0);
+        rotateGrabL.setPower(0);
+        rotateGrabR.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
