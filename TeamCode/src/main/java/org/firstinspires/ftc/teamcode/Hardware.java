@@ -6,29 +6,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a single robot.
  *
+ *
  * This hardware class assumes the following device names have been configured on the robot:
  * Note:  All names are case sensitive and some have single spaces between words.
- *
- * Motor channel:  Left  Front drive motor:         "left front"
- * Motor channel:  Right Front drive motor:         "right front"
- * Motor channel:  Left  Back drive motor:          "left back"
- * Motor channel:  Right Back drive motor:          "right back"
- *
- * Motor channel:  Catapult motor:                  "arm"
- *
- * Motor channel:  Lift motor vertical              "lift vert"
- * Motor channel:  Lift motor horizontal            "lift hor"
- *
- * Servo channel:  Claw servo:                      "claw"
- *
- * Servo channel:  Gate servo:                      "gate"
- *
  */
 public class Hardware
 {
@@ -40,10 +27,11 @@ public class Hardware
     public DcMotor  motorFrontRight  = null;
     public DcMotor  motorBackRight   = null;
 
-    // Arms
-    public CRServo rotateGrabL = null;
-    public CRServo rotateGrabR = null;
+    // Servo arm
+    public Servo sensor_arm = null;
+    public ColorSensor color_sensor = null;
 
+    // clamping system
     public DcMotor drawer = null;
     public DcMotor clampR = null;
     public DcMotor clampL = null;
@@ -61,34 +49,25 @@ public class Hardware
         // save reference to HW Map
         hardwareMap = ahwMap;
 
+
+        //sensor
+//        color_sensor = hardwareMap.colorSensor.get("color_sensor");
+        // servo
+//        sensor_arm = hardwareMap.servo.get("sensor_arm");
         // Wheels
-        motorFrontLeft = hardwareMap.dcMotor.get("d_q2");
-        motorFrontRight = hardwareMap.dcMotor.get("d_q1");
-        motorBackLeft = hardwareMap.dcMotor.get("d_q3");
-        motorBackRight = hardwareMap.dcMotor.get("d_q4");
-
-        // Grabber
-
-        rotateGrabL = hardwareMap.crservo.get("g_sweepL");
-        rotateGrabR = hardwareMap.crservo.get("g_sweepR");
+        motorFrontLeft = hardwareMap.dcMotor.get("wheel_right_front");//ok
+        motorFrontRight = hardwareMap.dcMotor.get("wheel_left_front"); //ok
+        motorBackLeft = hardwareMap.dcMotor.get("wheel_right_back");//ok
+        motorBackRight = hardwareMap.dcMotor.get("wheel_left_back");//ok
 
         // Clamps
 
-        clampR = hardwareMap.dcMotor.get("g_clampR");
-        clampL = hardwareMap.dcMotor.get("g_clampL");
+        clampR = hardwareMap.dcMotor.get("clamp_r");//ok
+        clampL = hardwareMap.dcMotor.get("clamp_l");//ok
 
         // Drawer
 
-        drawer = hardwareMap.dcMotor.get("v_drawer");
-
-        // Set all motors to zero power
-        motorFrontLeft.setPower(0);
-        motorFrontRight.setPower(0);
-        motorBackLeft.setPower(0);
-        motorBackRight.setPower(0);
-
-        rotateGrabL.setPower(0);
-        rotateGrabR.setPower(0);
+        drawer = hardwareMap.dcMotor.get("drawer_v");// ok
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -107,6 +86,7 @@ public class Hardware
      * @param periodMs  Length of wait cycle in mSec.
      * @throws InterruptedException
      */
+
     public void waitForTick(long periodMs)  throws InterruptedException {
 
         long  remaining = periodMs - (long)runtime.milliseconds();

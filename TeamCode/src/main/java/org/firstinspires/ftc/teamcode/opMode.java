@@ -29,172 +29,86 @@ public class opMode extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            /**
-             * Navigation - Controler 1
-             */
+            //Robot is waiting to start
+            waitForStart();
 
-            // Values declared for stick navigation
-            double leftstick = gamepad1.left_stick_y;
-            double rightstick = gamepad1.right_stick_y;
+            while (opModeIsActive()) {
+            //Show imput
 
-            // Values declared for dpad navigation
-            boolean dpad_up1 = gamepad1.dpad_up;
-            boolean dpad_down1 = gamepad1.dpad_down;
-            boolean dpad_left1 = gamepad1.dpad_left;
-            boolean dpad_right1 = gamepad1.dpad_right;
+                //buttons
+                telemetry.addData("a: ",gamepad1.a);
+                telemetry.addData("b: ",gamepad1.b);
+                telemetry.addData("y: ",gamepad1.y);
+                telemetry.addData("x: ",gamepad1.x);
 
-            boolean dpad_up2 = gamepad2.dpad_up;
-            boolean dpad_down2 = gamepad2.dpad_down;
+                //right stick
+                telemetry.addData("right stick Y: ",(gamepad1.right_stick_y));
+                telemetry.addData("right stick X: ",(gamepad1.right_stick_x));
 
-            int dpad_upValue = 0;
-            int dpad_downValue = 0;
-            int dpad_leftValue = 0;
-            int dpad_rightValue = 0;
+                //left stick
+                telemetry.addData("left stick Y: ",(gamepad1.left_stick_y));
+                telemetry.addData("left stick X: ",(gamepad1.left_stick_x));
 
-            // Speed via Stick
-            robot.motorBackLeft.setPower(leftstick/2);
-            robot.motorFrontLeft.setPower(leftstick/2);
-            robot.motorFrontRight.setPower(rightstick/2);
-            robot.motorBackRight.setPower(rightstick/2);
+                //d pad
+                telemetry.addData("d pad up:",gamepad1.dpad_up);
+                telemetry.addData("d pad down:",gamepad1.dpad_down);
+                telemetry.addData("d pad left:",gamepad1.dpad_left);
+                telemetry.addData("d pad right:",gamepad1.dpad_right);
 
-            // Speed via Dpad
+                //trigger
+                telemetry.addData("right trigger:",gamepad1.right_trigger);
+                telemetry.addData("left trigger:",gamepad1.left_trigger);
 
-            // Convert boolean values to ints
-            if(dpad_up1 == true){
-                dpad_upValue = 1;
+                //bumper
+                telemetry.addData("right bumper:",gamepad1.right_bumper);
+                telemetry.addData("left bumper:",gamepad1.left_bumper);
+
+                //update
+                telemetry.update();
+
+                //Start code for moving
+
+                // Drive train
+                robot.motorBackRight.setPower(-gamepad1.right_stick_y/2);
+                robot.motorFrontRight.setPower(-gamepad1.right_stick_y/2);
+                robot.motorBackLeft.setPower(gamepad1.left_stick_y/2);
+                robot.motorFrontLeft.setPower(gamepad1.left_stick_y/2);
+
+                //v drawer slide
+                if (gamepad1.x)
+                {
+                    robot.drawer.setPower(-.25);
+                }
+
+                else if (gamepad1.y)
+                {
+                    robot.drawer.setPower(1);
+                }
+
+                else
+                {
+                    robot.drawer.setPower(0);
+                }
+                //clamps
+                //CHECK SIGNS
+                if (gamepad1.a){
+                    robot.clampR.setPower(.25);
+                    robot.clampL.setPower(-.25);
+                }
+                else if (gamepad1.b)
+                {
+                    robot.clampR.setPower(-.25);
+                    robot.clampL.setPower(.25);
+                }
+
+                else
+                {
+                    robot.clampR.setPower(0);
+                    robot.clampL.setPower(0);
+                }
+
+
             }
-            if(dpad_down1 == true){
-                dpad_downValue = -1;
-            }
-            if(dpad_left1 == true){
-                dpad_leftValue = 1;
-            }
-            if(dpad_right1 == true){
-                dpad_rightValue = 1;
-            }
-
-            // Forward
-            robot.motorBackLeft.setPower(dpad_upValue);
-            robot.motorFrontLeft.setPower(dpad_upValue);
-            robot.motorFrontRight.setPower(dpad_upValue);
-            robot.motorBackRight.setPower(dpad_upValue);
-
-            // Backwards
-            robot.motorBackLeft.setPower(dpad_downValue);
-            robot.motorFrontLeft.setPower(dpad_downValue);
-            robot.motorFrontRight.setPower(dpad_downValue);
-            robot.motorBackRight.setPower(dpad_downValue);
-
-            // Left
-            robot.motorBackLeft.setPower(dpad_leftValue*-1);
-            robot.motorFrontLeft.setPower(dpad_leftValue*-1);
-            robot.motorFrontRight.setPower(dpad_leftValue);
-            robot.motorBackRight.setPower(dpad_leftValue);
-
-            // Right
-            robot.motorBackLeft.setPower(dpad_leftValue);
-            robot.motorFrontLeft.setPower(dpad_leftValue);
-            robot.motorFrontRight.setPower(dpad_leftValue*-1);
-            robot.motorBackRight.setPower(dpad_leftValue*-1);
-
-            /**
-             * Sweepers - Controller 1
-             */
-
-            if(gamepad1.left_trigger > 0){
-                robot.rotateGrabL.setPower(gamepad1.right_trigger);
-                robot.rotateGrabR.setPower(gamepad1.right_trigger);
-            }
-            else{
-                robot.rotateGrabL.setPower(0);
-                robot.rotateGrabR.setPower(0);
-            }
-            if(gamepad1.right_trigger > 0){
-                robot.rotateGrabL.setPower(gamepad1.right_trigger);
-                robot.rotateGrabR.setPower(gamepad1.right_trigger);
-            }
-            else{
-                robot.rotateGrabL.setPower(0);
-                robot.rotateGrabR.setPower(0);
-            }
-
-            /**
-             * Clamps - Controller 2
-             */
-
-                robot.clampL.setPower(gamepad2.left_stick_x/5);
-                robot.clampR.setPower(gamepad2.right_stick_x/5);
-
-
-            /**
-             * Drawer - Controller 2
-             */
-            if(dpad_up2 == true){
-                robot.drawer.setPower(1);
-            }
-            else{
-                robot.drawer.setPower(0);
-            }
-            if(dpad_down2 == true){
-                robot.drawer.setPower(-1);
-            }
-            else{
-                robot.drawer.setPower(0);
-            }
-
-
-            /**
-             * Telemetry Code
-             */
-            // Logs
-            telemetry.addData("Status", "Running for " + runtime.toString() + " :)");
-            telemetry.addData("Left top speed :", leftstick);
-            telemetry.addData("Right top speed :", rightstick);
-            telemetry.update();
-
-            // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
-            robot.waitForTick(40);
-            idle();
-
-            /*
-                Legacy Code. PLEASE IGNORE
-             */
-            // boolean claw = gamepad1.left_bumper;
-            // double  clawPosition = robot.Claw.getPosition(); //Position of Claw
-
-            //boolean ShiftLeft = gamepad1.dpad_left;
-            //boolean ShiftRight = gamepad1.dpad_right;
-            //while(left_trigger)
-            /*          // Arm ~ Right Trigger for Up / Left Trigger Down ~
-            if (gamepad1.right_trigger == 1)
-                robot.Arm.setPower(ARM_SPEED);
-            else if(gamepad1.left_trigger == 1)
-                robot.Arm.setPower(-ARM_SPEED);
-
-            //Claw - SERVO
-            robot.Claw.setPosition(Hardware.CLAW_HOME);
-            if(claw) {
-                robot.Claw.setPosition(1);
-                sleep(10);
-            }
-            */
-            //shift left
-            /*
-            if(ShiftLeft){
-                robot.motorBackLeft.setPower(0.5);
-                robot.motorFrontLeft.setPower(0.5);
-                robot.motorFrontRight.setPower(0);
-                robot.motorBackRight.setPower(0);
-            }
-
-            //shift right
-            if (ShiftRight){
-                robot.motorBackLeft.setPower(0);
-                robot.motorFrontLeft.setPower(0);
-                robot.motorFrontRight.setPower(0.5);
-                robot.motorBackRight.setPower(0.5);
-            }
-            */
         }
     }
 }
